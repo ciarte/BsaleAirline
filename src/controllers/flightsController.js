@@ -1,34 +1,29 @@
-const express = require("express");
-const router = express.Router();
-const connection = require("../database/db.js");
-const { sortFunc } = require("../services/index.js");
+let {
+  sortFunc,
+  getSeatByID,
+  getFlightByID,
+  getSeatsByAirplane,
+  getBoardingPassByFligth,
+} = require("../services/index.js");
 
-const getAllFlights = async (req, res) => {
-  let [result] = await connection.query("SELECT * FROM seat");
+let getAllFlights = async (req, res) => {
+  let result = await getSeatByID();
   res.json(result);
 };
 
-const getFlightsByID = async (req, res) => {
-  const idPassenger = req.params.id;
-  const reservedSeat = [];
-  const unAssings = [];
+let getFlightsByID = async (req, res) => {
+  let idPassenger = req.params.id;
+  let reservedSeat = [];
+  let unAssings = [];
 
   try {
-    const [resultFlight] = await connection.query(
-      "SELECT * FROM flight WHERE flight_id=?",
-      [idPassenger]
-    );
-    const [result] = await connection.query(
-      "SELECT * FROM seat WHERE airplane_id = ?",
-      [resultFlight[0].airplane_id]
-    );
+    let resultFlight = await getFlightByID(idPassenger);
+    let airplane = resultFlight[0].airplane_id;
 
-    const [boarding_pass] = await connection.query(
-      "SELECT * FROM boarding_pass JOIN passenger ON boarding_pass.passenger_id = passenger.passenger_id WHERE flight_id=?",
-      [idPassenger]
-    );
+    let result = await getSeatsByAirplane(airplane);
+    let boardingPass = await getBoardingPassByFligth(idPassenger);
 
-    var resultFlights = {
+    let resultFlights = {
       flightId: resultFlight[0].flight_id,
       takeoffDateTime: resultFlight[0].takeoff_date_time,
       takeoffAirport: resultFlight[0].takeoff_airport,
@@ -38,7 +33,7 @@ const getFlightsByID = async (req, res) => {
       passengers: [],
     };
 
-    let allPassengers = boarding_pass.sort(
+    let allPassengers = boardingPass.sort(
       (a, b) => a.purchase_id - b.purchase_id
     );
 
@@ -54,95 +49,75 @@ const getFlightsByID = async (req, res) => {
       (pass) => !reservedSeat.includes(pass.seat_id)
     );
 
-    let minors = allPassengers.filter((p) => p.age < 18 && p.seat_id == null);
-    let adults = allPassengers.filter((p) => p.age >= 18 && p.seat_id == null);
+    // let minors = allPassengers.filter((p) => p.age < 18 && p.seat_id == null);
+    // let adults = allPassengers.filter((p) => p.age >= 18 && p.seat_id == null);
 
-    if (minors.length) {
+    let groupedPassengers = {};
+    allPassengers.forEach((p) => {
+      if (!groupedPassengers[p.purchase_id]) {
+        groupedPassengers[p.purchase_id] = { minors: [], adults: [] };
+      }
+      if (p.age < 18) {
+        groupedPassengers[p.purchase_id].minors.push(p);
+      } else {
+        groupedPassengers[p.purchase_id].adults.push(p);
+      }
+    });
+
+    for (let [_, group] of Object.entries(groupedPassengers)) {
+      let minors = group.minors;
+      let adults = group.adults;
+
       for (let i = 0; i < minors.length; i++) {
-        let availableSeatsForMinor = availableSeat.filter(
-          (seat) => seat.seat_type_id === minors[i].seat_type_id
-        );
-        if (availableSeatsForMinor.length > 0) {
-          let seatForMinor = availableSeatsForMinor[0];
-          minors[i].seat_id = seatForMinor.seat_id;
-          resultFlights.passengers.push(minors[i]);
-          let nextSeatColumn = String.fromCharCode(
-            seatForMinor.seat_column.charCodeAt() + 1
-          );
-          let availableSeatForAdult = availableSeat.find(
-            (seat) =>
-              seat.seat_row === seatForMinor.seat_row &&
-              seat.seat_column === nextSeatColumn
-          );
-          if (availableSeatForAdult) {
-            let adult = adults.find(
-              (adult) => adult.purchase_id === minors[i].purchase_id
-            );
-            // console.log(adult, minors.length,)
-            if (adult) {
-              adult.seat_id = availableSeatForAdult.seat_id;
-              resultFlights.passengers.push(adult);
-              availableSeat.splice(availableSeat.indexOf(seatForMinor), 1);
-              availableSeat.splice(
-                availableSeat.indexOf(availableSeatForAdult),
-                1
-              );
-              adults.splice(adults.indexOf(adult), 1);
-            }
-          }
-        }
-      }
-    }
-    let restPassenger = adults;
-    if (restPassenger.length) {
-      for (let i = 0; i < restPassenger.length; i++) {
-        let seatsAdult1 = availableSeat.filter(
-          (seat) => seat.seat_type_id === restPassenger[i].seat_type_id
-        );
-        if (seatsAdult1.length > 0) {
-          let seatForAdult = seatsAdult1[0];
-          restPassenger[i].seat_id = seatForAdult.seat_id;
-          resultFlights.passengers.push(restPassenger[i]);
+        let minor = minors[i];
+        let seatType = minor.seat_type_id;
 
-          // let nextSeatColumn = String.fromCharCode(
-          //   seatForAdult.seat_column.charCodeAt() + 1
-          // );
-          // let availableSeatForAdult = availableSeat.find(
-          //   (seat) =>
-          //     seat.seat_row === seatForAdult.seat_row &&
-          //     seat.seat_column === nextSeatColumn
-          // );
-          // if (availableSeatForAdult) {
-          //   let adult = restPassenger.find(
-          //     (adult) =>
-          //     adult.purchase_id ===  restPassenger[i].purchase_id
-          //   );
-          // if (adult) {
-          //   adult.seat_id = availableSeatForAdult.seat_id;
-          //   resultFlights.passengers.push(adult);
-          availableSeat.splice(availableSeat.indexOf(seatForAdult), 1);
-          // availableSeat.splice(availableSeat.indexOf(availableSeatForAdult), 1);
-          //   adults.splice(adults.indexOf(adult), 1);
-          // }
-          // }
-        }
+        let availableSeatsForMinor = availableSeat.filter(
+          (seat) => seat.seat_type_id === seatType
+        );
+        if (availableSeatsForMinor.length === 0) continue;
+        let seatForMinor = availableSeatsForMinor[0];
+        minor.seat_id = seatForMinor.seat_id;
+        availableSeat.splice(availableSeat.indexOf(seatForMinor), 1);
+
+        let seatRow = seatForMinor.seat_row;
+        let nextSeatColumn = String.fromCharCode(
+          seatForMinor.seat_column.charCodeAt() + 1
+        );
+        let availableSeatForAdult = availableSeat.find(
+          (seat) =>
+            seat.seat_row === seatRow && seat.seat_column === nextSeatColumn
+        );
+        if (!availableSeatForAdult) continue;
+
+        let adult = adults.find((a) => !a.seat_id);
+        if (!adult) continue;
+        adult.seat_id = availableSeatForAdult.seat_id;
+        resultFlights.passengers.push(minor, adult);
+        availableSeat.splice(availableSeat.indexOf(availableSeatForAdult), 1);
+
+        minors.splice(i, 1);
+        i--;
+        adults.splice(adults.indexOf(adult), 1);
       }
     }
-    console.log(resultFlights.passengers.length, allPassengers.length);
-    // resultFlights.passengers.sort((a,b)=> a.purchase_id - b.purchase_id);
+
     resultFlights.passengers = resultFlights.passengers
-      .map((d) => 
-        d = {
-          passengerId: d.passenger_id,
-          dni: d.dni,
-          name: d.name,
-          age: d.age,
-          country: d.country,
-          boardingPassId: d.boarding_pass_id,
-          purchaseId: d.purchase_id,
-          seatTypeId: d.seat_type_id,
-          seatId: d.seat_id,
-      }).sort(sortFunc);
+      .map(
+        (d) =>
+          (d = {
+            passengerId: d.passenger_id,
+            dni: d.dni,
+            name: d.name,
+            age: d.age,
+            country: d.country,
+            boardingPassId: d.boarding_pass_id,
+            purchaseId: d.purchase_id,
+            seatTypeId: d.seat_type_id,
+            seatId: d.seat_id,
+          })
+      )
+      .sort(sortFunc);
 
     if (resultFlight.length >= 0) {
       res.status(200).json({
