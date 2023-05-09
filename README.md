@@ -49,9 +49,6 @@ el cual retorna un objeto con la informacion completa del vuelo, incluyendo luga
 ### Analice la peticion HTTPS y el codigo🔩
 
 En la base de datos tenemos una tabla de pasajeros, la cual tiene algunos pasajeros con asiento asignado y otros no.
-el reto consistio en desarrollar un algoritmo que ubique en el avion a los pasajeros menores de edad con al menos uno de sus acompa;antes en el asiento de al lado, en la misma columna, sin espacio en medio (ya sea pasillo u otro pasajero).
-
-otra de las consignas es que los pasajeros con mismo numero de boarding Pass, queden sentados juntos o lo mas cerca posible.
 
 ```
 "code": 200,
@@ -63,25 +60,41 @@ otra de las consignas es que los pasajeros con mismo numero de boarding Pass, qu
     "landingAirport": "Aeropuerto Francisco Carlé, Perú",
     "airplaneId": 2,
     "passengers": [
-      {
-        "passengerId": 554,
-        "dni": "426939561",
-        "name": "Daniela",
-        "age": 33,
+    {},
+    {},
+    ...]
+    }
+```
+El reto consistio en desarrollar un algoritmo que ubique en el avion a los pasajeros menores de edad con al menos uno de sus acompa;antes en el asiento de al lado, de la misma columna, sin espacio en medio (ya sea pasillo u otro pasajero).
+otra de las consignas es que los pasajeros con mismo numero de boarding Pass, queden sentados juntos o lo mas cerca posible.
+
+```
+  "data": {
+    ... 
+    "passengers": [
+       {
+        "passengerId": 48,
+        "dni": "262424652",
+        "name": "Antonia",
+        "age": 15,
         "country": "México",
-        "boardingPassId": 113,
-        "purchaseId": 36,
-        "seatTypeId": 1,
-        "seatId": 164
+        "boardingPassId": 19,
+        "purchaseId": 59,
+        "seatTypeId": 3,
+        "seatId": 172
       },
-```
-
-### Y las pruebas de estilo de codificación ⌨️
-
-_Explica que verifican estas pruebas y por qué_
-
-```
-Da un ejemplo
+      {
+        "passengerId": 155,
+        "dni": "776418510",
+        "name": "Monserrat",
+        "age": 31,
+        "country": "Chile",
+        "boardingPassId": 245,
+        "purchaseId": 59,
+        "seatTypeId": 3,
+        "seatId": 192
+      },
+      ...]
 ```
 
 ## Despliegue 📦
@@ -90,7 +103,10 @@ _Agrega notas adicionales sobre como hacer deploy_
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
+JavaScript como lenguaje de programacion,
+Node.js con Express como entorno de trabajo,
+Sequelize.js como posible ORM,
+MYSQL como base de datos suministrada,
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
 * [Maven](https://maven.apache.org/) - Manejador de dependencias
