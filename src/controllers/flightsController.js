@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../database/db.js");
-const {
-  sortFunc,
-  // boardingPassByPurchase,
-  // boardingPassBySeat,
-} = require("../services/index.js");
+const { sortFunc } = require("../services/index.js");
 
 const getAllFlights = async (req, res) => {
   let [result] = await connection.query("SELECT * FROM seat");
@@ -15,7 +11,7 @@ const getAllFlights = async (req, res) => {
 const getFlightsByID = async (req, res) => {
   const idPassenger = req.params.id;
   const reservedSeat = [];
-  const assings = [];
+  const unAssings = [];
 
   try {
     const [resultFlight] = await connection.query(
@@ -35,85 +31,118 @@ const getFlightsByID = async (req, res) => {
     var resultFlights = {
       flightId: resultFlight[0].flight_id,
       takeoffDateTime: resultFlight[0].takeoff_date_time,
-      takeoffAirport: resultFlight[0].landing_airport,
+      takeoffAirport: resultFlight[0].takeoff_airport,
       landingDateTime: resultFlight[0].landing_date_time,
       landingAirport: resultFlight[0].landing_airport,
       airplaneId: resultFlight[0].airplane_id,
       passengers: [],
     };
 
-    await boarding_pass.forEach((d) => {
-      resultFlights.passengers.sort(sortFunc).push({
-        passengerId: d.passenger_id,
-        dni: d.dni,
-        name: d.name,
-        age: d.age,
-        country: d.country,
-        boardingPassId: d.boarding_pass_id,
-        purchaseId: d.purchase_id,
-        seatTypeId: d.seat_type_id,
-        seatId: d.seat_id,
-      });
-    });
-
-    let allPassengers = resultFlights.passengers;
+    let allPassengers = boarding_pass.sort(
+      (a, b) => a.purchase_id - b.purchase_id
+    );
 
     allPassengers.forEach((s) => {
-      if (s.seatId !== null) {
-        reservedSeat.push(s.seatId);
+      if (s.seat_id !== null) {
+        reservedSeat.push(s.seat_id);
+        resultFlights.passengers.push(s);
       }
+      unAssings.push(s);
     });
 
-    //asientos disponibles en el vuelo
     let availableSeat = await result.filter(
       (pass) => !reservedSeat.includes(pass.seat_id)
     );
 
-    //se agrupan asientos por filas
-    const boardingPassBySeat = availableSeat.reduce((acc, curr) => {
-      acc[curr.seat_column] = acc[curr.seat_column] || [];
-      acc[curr.seat_column].push(curr);
-      return acc;
-    }, {});
+    let minors = allPassengers.filter((p) => p.age < 18 && p.seat_id == null);
+    let adults = allPassengers.filter((p) => p.age >= 18 && p.seat_id == null);
 
-    //asignar asientos primero a menores de edad
-    let seats = availableSeat;
-
-    for (let i = 0; i < allPassengers.length; i++) {
-      if (allPassengers[i].seatId !== null) {
-        let pass = allPassengers[i]
-        if (pass.age < 18) {
-          let adult = allPassengers.findIndex(
-            (a) => a.purchaseId === pass.purchaseId && a.age >= 18
+    if (minors.length) {
+      for (let i = 0; i < minors.length; i++) {
+        let availableSeatsForMinor = availableSeat.filter(
+          (seat) => seat.seat_type_id === minors[i].seat_type_id
+        );
+        if (availableSeatsForMinor.length > 0) {
+          let seatForMinor = availableSeatsForMinor[0];
+          minors[i].seat_id = seatForMinor.seat_id;
+          resultFlights.passengers.push(minors[i]);
+          let nextSeatColumn = String.fromCharCode(
+            seatForMinor.seat_column.charCodeAt() + 1
           );
-          if (allPassengers[adult].seatId === null) {
-            let j = 0;
-            while (j < seats.length) {
-              const setSeat = seats.filter(s => s.seat_type_id === allPassengers[adult].seatTypeId);
-              newSeat = seats[j];
-              const seatMenor = seats.find(s => s.seat_column === newSeat.seat_column && s.seat_row.charCodeAt() === newSeat.seat_row.charCodeAt()+1);
-              if (seatMenor) {
-                resultFlights.passengers[i].seatId = seatMenor.seat_id;
-                resultFlights.passengers.adult.passengerId = newSeat.seat_id;
-                break;
-              } j++;
-            // const setSeat = seats.filter(s=> s.seat_type_id === adult.seatTypeId)
-            // const newSeat = setSeat[j]
-            // const seatMenor = seats.find(
-            //   s=> s.seat_column === setSeat.seat_column && s.seat_row.charCodeAt() === setSeat.seat_row.charCodeAt())
-            // if(!seatMenor){
-            //   j++;
-            // } else {
-            //    pass.seatId = seatMenor.seat_id;
-            //    adult.seatId = newSeat.seat_id;
-            // }
+          let availableSeatForAdult = availableSeat.find(
+            (seat) =>
+              seat.seat_row === seatForMinor.seat_row &&
+              seat.seat_column === nextSeatColumn
+          );
+          if (availableSeatForAdult) {
+            let adult = adults.find(
+              (adult) => adult.purchase_id === minors[i].purchase_id
+            );
+            // console.log(adult, minors.length,)
+            if (adult) {
+              adult.seat_id = availableSeatForAdult.seat_id;
+              resultFlights.passengers.push(adult);
+              availableSeat.splice(availableSeat.indexOf(seatForMinor), 1);
+              availableSeat.splice(
+                availableSeat.indexOf(availableSeatForAdult),
+                1
+              );
+              adults.splice(adults.indexOf(adult), 1);
+            }
           }
-        }console.log(seats)
+        }
       }
-    } return  resultFlights.passengers;
-  }
-    
-    console.log(seats);
+    }
+    let restPassenger = adults;
+    if (restPassenger.length) {
+      for (let i = 0; i < restPassenger.length; i++) {
+        let seatsAdult1 = availableSeat.filter(
+          (seat) => seat.seat_type_id === restPassenger[i].seat_type_id
+        );
+        if (seatsAdult1.length > 0) {
+          let seatForAdult = seatsAdult1[0];
+          restPassenger[i].seat_id = seatForAdult.seat_id;
+          resultFlights.passengers.push(restPassenger[i]);
+
+          // let nextSeatColumn = String.fromCharCode(
+          //   seatForAdult.seat_column.charCodeAt() + 1
+          // );
+          // let availableSeatForAdult = availableSeat.find(
+          //   (seat) =>
+          //     seat.seat_row === seatForAdult.seat_row &&
+          //     seat.seat_column === nextSeatColumn
+          // );
+          // if (availableSeatForAdult) {
+          //   let adult = restPassenger.find(
+          //     (adult) =>
+          //     adult.purchase_id ===  restPassenger[i].purchase_id
+          //   );
+          // if (adult) {
+          //   adult.seat_id = availableSeatForAdult.seat_id;
+          //   resultFlights.passengers.push(adult);
+          availableSeat.splice(availableSeat.indexOf(seatForAdult), 1);
+          // availableSeat.splice(availableSeat.indexOf(availableSeatForAdult), 1);
+          //   adults.splice(adults.indexOf(adult), 1);
+          // }
+          // }
+        }
+      }
+    }
+    console.log(resultFlights.passengers.length, allPassengers.length);
+    // resultFlights.passengers.sort((a,b)=> a.purchase_id - b.purchase_id);
+    resultFlights.passengers = resultFlights.passengers
+      .map((d) => 
+        d = {
+          passengerId: d.passenger_id,
+          dni: d.dni,
+          name: d.name,
+          age: d.age,
+          country: d.country,
+          boardingPassId: d.boarding_pass_id,
+          purchaseId: d.purchase_id,
+          seatTypeId: d.seat_type_id,
+          seatId: d.seat_id,
+      }).sort(sortFunc);
 
     if (resultFlight.length >= 0) {
       res.status(200).json({

@@ -10,25 +10,8 @@ const sortFunc = function compareAge(a, b) {
   return 0;
 }
 
-//   const boardingPassByPurchase =( passenger)=> {passenger.reduce(
-//       (acc, curr) => {
-//         acc[curr.purchaseId] = acc[curr.purchaseId] || [];
-//         acc[curr.purchaseId].push(curr);
-//         return acc;
-//       },
-//       {}
-//     )};
-
-// const boardingPassBySeat = async (result) => await result.reduce((acc, curr) => {
-//       acc[curr.seat_column] = acc[curr.seat_column] || [];
-//       acc[curr.seat_column].push(curr);
-//       return acc;
-//     }, {});
-
 
 module.exports = {
   sortFunc,
-  // boardingPassByPurchase,
-  // boardingPassBySeat,
-  
+
 }
