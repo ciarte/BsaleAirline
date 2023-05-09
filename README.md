@@ -1,6 +1,7 @@
 # AIRLINE - BSALE
 
-Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajerosd de una Aerolinea
+Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajerosd de una Aerolinea,
+se trata de una API REST con un solo endpoint que permite coonsultar por ID de vuelo y retorna la simulacion, la cual le debe asignar los asientos a cada pasajero que aun no tenga uno asignado.
 
 ## Comenzando 🚀
 
@@ -14,23 +15,24 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 intalar las dependencias de node.js
 
 ```
-npm install
+npm i
 ```
-Tener instalado MSQL & MYSQL Workbench
+Tener instalado MYSQL & MYSQL Workbench
 https://dev.mysql.com/downloads/
+
+Luego en el archivo db.js, deberas comentar/descomentar el codigo de acuerdo a si sera en localhost o remota la base de datos.
 
 ### Instalación 🔧
 
-Si se va a 
-
-_Dí cómo será ese paso_
+Luego tenemos otras dependencias, que con npm i, deberia estar completo pero si presenta algun conflicto podrias revisar el package.json en caso que falte alguna aca puedes seguir los pasos
 
 ```
-Da un ejemplo
+npm i express
+npm install --save mysql2
+npm install --save sequelize
 ```
 
-_Y repite_
-
 ```
-hasta finalizar
+npm i nodemon
+npm i dotenv
 ```
