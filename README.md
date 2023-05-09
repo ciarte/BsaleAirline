@@ -42,8 +42,9 @@ el principal donde se realiza la simulacion que se pide en la postulacion, y adi
 
 ## Ejecutando las pruebas ⚙️
 
-http://localhost:3000/flights/:id/passengers
+[http://localhost:3000/flights/:id/passengers](http://localhost:3000/flights/:id/passengers) como endpoint a evaluar.
 
+Donde el :id refiere al ID del vuelo buscado para la simulacion,
 el cual retorna un objeto con la informacion completa del vuelo, incluyendo lugar de partida y destino, fecha, ID del avion y lista de pasajeros.
 
 ### Analice la peticion HTTPS y el codigo🔩
@@ -108,18 +109,6 @@ Node.js con Express como entorno de trabajo,
 Sequelize.js como posible ORM,
 MYSQL como base de datos suministrada,
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
-* [Maven](https://maven.apache.org/) - Manejador de dependencias
-* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
-
-## Contribuyendo 🖇️
-
-Por favor lee el [CONTRIBUTING.md](https://gist.github.com/villanuevand/xxxxxx) para detalles de nuestro código de conducta, y el proceso para enviarnos pull requests.
-
-## Wiki 📖
-
-Puedes encontrar mucho más de cómo utilizar este proyecto en nuestra [Wiki](https://github.com/tu/proyecto/wiki)
-
 ## Versionado 📌
 
 Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/tu/proyecto/tags).
@@ -128,7 +117,7 @@ Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-* **Andrés Villanueva** - *Trabajo Inicial* - [villanuevand](https://github.com/villanuevand)
+* **Gabriel Iciarte** - *Trabajo Inicial* - [Gabriel Iciarte](https://www.linkedin.com/in/gabriel-iciarte/)
 * **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
 
 También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
