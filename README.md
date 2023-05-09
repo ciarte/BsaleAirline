@@ -4,7 +4,7 @@ Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajeros
 
 ## Comenzando 🚀
 
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
+Si deseas correr el proyecto en local aca esta el script para una base de datos en MYSQL https://drive.google.com/file/d/1BhiiN7poQvSpCD5Pf01_V_KtOZ7BdpWO/view?usp=sharing
 
 Mira **Deployment** para conocer como desplegar el proyecto.
 
@@ -14,12 +14,14 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 intalar las dependencias de node.js
 
 ```
-npm i 
+npm install
 ```
+Tener instalado MSQL & MYSQL Workbench
+https://dev.mysql.com/downloads/
 
 ### Instalación 🔧
 
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
+Si se va a 
 
 _Dí cómo será ese paso_
 
