@@ -1,15 +1,16 @@
 let {
   sortFunc,
-  getSeatByID,
+  // getSeatByID,
   getFlightByID,
   getSeatsByAirplane,
   getBoardingPassByFligth,
 } = require("../services/index.js");
 
-let getAllFlights = async (req, res) => {
-  let result = await getSeatByID();
-  res.json(result);
-};
+// to see all seats of 2 airplanes
+// let getAllSeatsFlights = async (req, res) => {
+//   let result = await getSeatByID();
+//   res.json(result);
+// };
 
 let getFlightsByID = async (req, res) => {
   let idPassenger = req.params.id;
@@ -148,6 +149,6 @@ let getFlightsByID = async (req, res) => {
 };
 
 module.exports = {
-  getAllFlights,
+  // getAllSeatsFlights,
   getFlightsByID,
 };
