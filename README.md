@@ -1,4 +1,4 @@
-# Airline - Bsale
+# Airline - Bsale 	:airplane:
 
 Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajerosd de una Aerolinea,
 se trata de una API REST con un solo endpoint que permite coonsultar por ID de vuelo y retorna la simulacion, la cual le debe asignar los asientos a cada pasajero que aun no tenga uno asignado.
@@ -82,7 +82,7 @@ En la base de datos tenemos una tabla de pasajeros, la cual tiene algunos pasaje
     ...]
     }
 ```
-El reto consistio en desarrollar un algoritmo que ubique en el avion a los pasajeros menores de edad con al menos uno de sus acompa;antes en el asiento de al lado, de la misma columna, sin espacio en medio (ya sea pasillo u otro pasajero).
+El reto consistio en desarrollar un algoritmo que ubique en el avion a los pasajeros menores de edad con al menos uno de sus acompa;antes en el asiento de al lado, de la misma columna, sin espacio en medio (ya sea pasillo u otro pasajero). :seat::seat:
 otra de las consignas es que los pasajeros con mismo numero de boarding Pass, queden sentados juntos o lo mas cerca posible.
 
 ```
@@ -192,9 +192,8 @@ MYSQL como base de datos suministrada,
 <!-- * Comenta a otros sobre este proyecto u otro de mi repositorio que te interese 📢
 * Invita una cerveza 🍺 o un café ☕ a alguien del equipo.  -->
 * Primro que nada gracias por el contacto y la oportunidad de realizar este challenge 🤓.
-* Se que el codigo se podria mejorar, y confio en que teniendo un poco mas de tiempo podria optimizar sus funcionalidades y lectura de codigo,
 * Pido Feedback sobre el codigo y observaciones para mejorarlo :man_teacher: 
-* etc.
+* Espero seguir con el proceso y trabajar juntos :briefcase::computer:
 
 
 
