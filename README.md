@@ -20,7 +20,7 @@ npm i
 Tener instalado MYSQL & MYSQL Workbench
 https://dev.mysql.com/downloads/
 
-Luego en el archivo db.js, deberas comentar/descomentar el codigo de acuerdo a si sera en localhost o remota la base de datos.
+Luego en el archivo db.js, deberas comentar/descomentar el codigo de acuerdo a si sera en local o remota la base de datos.
 Crear un archivo .env con las siguientes consideraciones
 ```
 
@@ -141,12 +141,14 @@ Luego se obtiene el codigo ASCII de la letra de la columna del asiento del menor
         );
    ....
  ```
- Luego se van a buscar el resto de asientos para los pasajeros adultos, ubicandolos en asientos mas cercanos ya sea por filas o columnas, se va eliminando el asiento de la lista de asientos disponibles y se elimina al menor y al adulto de sus respectivos arreglos de pasajeros.
- 
-  Y por ultimo se da formato indicado en las condiciones del ejercicio a los pasajeros, con los datos correspondientes.
+Se van a buscar el resto de asientos para los pasajeros adultos, ubicandolos en asientos mas cercanos ya sea por filas o columnas, se va eliminando el asiento de la lista de asientos disponibles y se elimina al menor y al adulto de sus respectivos arreglos de pasajeros.
+
+Despues de esa asignacion de asientos a todos los menores y uno de sus adultos, se va a asignar los asientos a los pasajeros restantes que aun no tengan asignado uno, de manera que se trata de sentar a los adultos con igual 'purchase_id' en asientos cercanos.
+
+Y por ultimo se da formato indicado en las condiciones del ejercicio a los pasajeros, con los datos solicitados y ordenandolo por 'purchase_id'.
  ```
  ...
-    resultFlights.passengers = resultFlights.passengers
+    resultFlights.passengers = boardingPass
       .map(
         (d) =>
           (d = {
@@ -161,6 +163,7 @@ Luego se obtiene el codigo ASCII de la letra de la columna del asiento del menor
             seatId: d.seat_id,
           })
       )
+      .sort(sortFunc);
       ...
  ```
 
@@ -180,13 +183,14 @@ MYSQL como base de datos suministrada,
 
 ## Autores ✒️
 
-* **Gabriel Iciarte** - *Trabajo Inicial* - [Gabriel Iciarte](https://www.linkedin.com/in/gabriel-iciarte/)
+* **Gabriel Iciarte** - *Trabajo Back-end* - [Gabriel Iciarte](https://www.linkedin.com/in/gabriel-iciarte/)
+* **Bsale** - *DATA BASE solo lectura* 
 
 
 ## Expresiones de Gratitud 🎁
 
-* Comenta a otros sobre este proyecto u otro de mi repositorio que te interese 📢
-* Invita una cerveza 🍺 o un café ☕ a alguien del equipo. 
+<!-- * Comenta a otros sobre este proyecto u otro de mi repositorio que te interese 📢
+* Invita una cerveza 🍺 o un café ☕ a alguien del equipo.  -->
 * Da las gracias públicamente 🤓.
 * Da Feedback sobre el codigo y observaciones para mejorarlo
 * etc.
