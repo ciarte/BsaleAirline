@@ -4,7 +4,7 @@ const router = express.Router();
 const { getAllFlights, getFlightsByID } = require("../../controllers/flightsController");
 
 router
-  .get("/", getAllFlights)
+  // .get("/", getAllFlights)
 
   .get("/:id/passengers", getFlightsByID);
 
