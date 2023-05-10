@@ -191,7 +191,7 @@ MYSQL como base de datos suministrada.
 
 <!-- * Comenta a otros sobre este proyecto u otro de mi repositorio que te interese 📢
 * Invita una cerveza 🍺 o un café ☕ a alguien del equipo.  -->
-* Primro que nada gracias por el contacto y la oportunidad de realizar este challenge 🤓.
+* Primero que nada gracias por el contacto y la oportunidad de realizar este challenge 🤓.
 * Pido Feedback sobre el codigo y observaciones para mejorarlo :man_teacher: 
 * Espero seguir con el proceso y trabajar juntos :briefcase::computer:
 
