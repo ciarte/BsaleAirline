@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
-var mysql = require("mysql2");
+var mysql = require("mysql2/promise");
 
 //deploy
 const host = process.env.HOST;
