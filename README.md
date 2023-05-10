@@ -166,7 +166,10 @@ Luego se obtiene el codigo ASCII de la letra de la columna del asiento del menor
 
 ## Despliegue 📦
 
-_notas adicionales sobre como hacer deploy_
+Realizado en Railway, donde el endpoibt valido es:
+[Mi Endpoint](https://bsaleairline-production.up.railway.app/flights/1/passengers)
+
+ID, debe ser un numero. (tiene como valor por defecto el id: 1)
 
 ## Construido con 🛠️
 
