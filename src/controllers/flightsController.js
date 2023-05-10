@@ -14,7 +14,6 @@ let getAllFlights = async (req, res) => {
 let getFlightsByID = async (req, res) => {
   let idPassenger = req.params.id;
   let reservedSeat = [];
-  let unAssings = [];
 
   try {
     let resultFlight = await getFlightByID(idPassenger);
@@ -42,15 +41,11 @@ let getFlightsByID = async (req, res) => {
         reservedSeat.push(s.seat_id);
         resultFlights.passengers.push(s);
       }
-      unAssings.push(s);
     });
 
     let availableSeat = await result.filter(
       (pass) => !reservedSeat.includes(pass.seat_id)
     );
-
-    // let minors = allPassengers.filter((p) => p.age < 18 && p.seat_id == null);
-    // let adults = allPassengers.filter((p) => p.age >= 18 && p.seat_id == null);
 
     let groupedPassengers = {};
     allPassengers.forEach((p) => {
@@ -100,9 +95,24 @@ let getFlightsByID = async (req, res) => {
         i--;
         adults.splice(adults.indexOf(adult), 1);
       }
+
+      for (let i = 0; i < adults.length; i++) {
+        let adult = adults[i];
+        if (adult.seat_id) continue;
+
+        let seatType = adult.seat_type_id;
+        let availableSeatsForAdult = availableSeat.filter(
+          (seat) => seat.seat_type_id === seatType
+        );
+        if (availableSeatsForAdult.length === 0) continue;
+        let seatForAdult = availableSeatsForAdult[0];
+        adult.seat_id = seatForAdult.seat_id;
+        resultFlights.passengers.push(adult);
+        availableSeat.splice(availableSeat.indexOf(seatForAdult), 1);
+      }
     }
 
-    resultFlights.passengers = resultFlights.passengers
+    resultFlights.passengers = boardingPass
       .map(
         (d) =>
           (d = {
