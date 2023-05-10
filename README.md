@@ -21,6 +21,21 @@ Tener instalado MYSQL & MYSQL Workbench
 https://dev.mysql.com/downloads/
 
 Luego en el archivo db.js, deberas comentar/descomentar el codigo de acuerdo a si sera en localhost o remota la base de datos.
+Crear un archivo .env con las siguientes consideraciones
+```
+
+PORT = '3000'
+HOST = 'mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com'
+USER = 'bsale_test'
+PASSWORD = 'bsale_test'
+DATABASE = 'airline'
+
+PORT_LOCAL = "puerto_configurado_de_MYSQL"
+HOST_LOCAL = "localhost"
+USER_LOCAL = "tu_usuario"
+PASSWORD_LOCAL = "tu_contrasena"
+DATABASE_LOCAL = "airline"
+```
 
 ### Instalación 🔧
 
@@ -49,6 +64,7 @@ el cual retorna un objeto con la informacion completa del vuelo, incluyendo luga
 
 ### Analice la peticion HTTPS y el codigo🔩
 
+Para modularizar el codigo, las llamadas a la DB se hacen desde la carpeta services, y en la carpeta controllers tendremos la logica del codigo, la carpeta V1 sera para las versiones.
 En la base de datos tenemos una tabla de pasajeros, la cual tiene algunos pasajeros con asiento asignado y otros no.
 
 ```
@@ -127,6 +143,27 @@ Luego se obtiene el codigo ASCII de la letra de la columna del asiento del menor
  ```
  Luego se van a buscar el resto de asientos para los pasajeros adultos, ubicandolos en asientos mas cercanos ya sea por filas o columnas, se va eliminando el asiento de la lista de asientos disponibles y se elimina al menor y al adulto de sus respectivos arreglos de pasajeros.
  
+  Y por ultimo se da formato indicado en las condiciones del ejercicio a los pasajeros, con los datos correspondientes.
+ ```
+ ...
+    resultFlights.passengers = resultFlights.passengers
+      .map(
+        (d) =>
+          (d = {
+            passengerId: d.passenger_id,
+            dni: d.dni,
+            name: d.name,
+            age: d.age,
+            country: d.country,
+            boardingPassId: d.boarding_pass_id,
+            purchaseId: d.purchase_id,
+            seatTypeId: d.seat_type_id,
+            seatId: d.seat_id,
+          })
+      )
+      ...
+ ```
+
 ## Despliegue 📦
 
 _notas adicionales sobre como hacer deploy_
