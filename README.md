@@ -113,7 +113,7 @@ otra de las consignas es que los pasajeros con mismo numero de boarding Pass, qu
       },
       ...]
 ```
-Para resolver esta problematica, primero se dividio la lista de los pasajeros para obtener un Array de pares clave-valor, donde la clave representa el 'purchase_id' ycada valor es un objeto que contiene dos Arrays, uno para menores de edad(<18) y otro para adultos,
+Para resolver esta problematica, primero se dividio la lista de los pasajeros para obtener un Array de pares clave-valor, donde la clave representa el 'purchase_id' y cada valor es un objeto que contiene dos Arrays, uno para menores de edad(<18) y otro para adultos, y por otro lado un Array con lista de asientos disponibles
 
 Ya que la condicion critica es sentar a los menores con sus respectivos adultos, lo primero que buscamos es un asiento disponible para los menores segun el 'seat_type_id' que posean, de la lista de asientos encontrados se le asigna el primer asiento mediante su ID, se elimina dicho asiento de la lista de asientos y al adulto que coincida con su 'purchase_id' se le asigna el asiento de la fila siguiente pero de la misma columna
 
@@ -191,8 +191,9 @@ MYSQL como base de datos suministrada,
 
 <!-- * Comenta a otros sobre este proyecto u otro de mi repositorio que te interese 📢
 * Invita una cerveza 🍺 o un café ☕ a alguien del equipo.  -->
-* Da las gracias públicamente 🤓.
-* Da Feedback sobre el codigo y observaciones para mejorarlo
+* Primro que nada gracias por el contacto y la oportunidad de realizar este challenge 🤓.
+* Se que el codigo se podria mejorar, y confio en que teniendo un poco mas de tiempo podria optimizar sus funcionalidades y lectura de codigo,
+* Pido Feedback sobre el codigo y observaciones para mejorarlo :man_teacher: 
 * etc.
 
 
