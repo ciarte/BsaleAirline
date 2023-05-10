@@ -1,4 +1,4 @@
-# AIRLINE - BSALE
+# Airline - Bsale
 
 Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajerosd de una Aerolinea,
 se trata de una API REST con un solo endpoint que permite coonsultar por ID de vuelo y retorna la simulacion, la cual le debe asignar los asientos a cada pasajero que aun no tenga uno asignado.
@@ -97,10 +97,39 @@ otra de las consignas es que los pasajeros con mismo numero de boarding Pass, qu
       },
       ...]
 ```
+Para resolver esta problematica, primero se dividio la lista de los pasajeros para obtener un Array de pares clave-valor, donde la clave representa el 'purchase_id' ycada valor es un objeto que contiene dos Arrays, uno para menores de edad(<18) y otro para adultos,
 
+Ya que la condicion critica es sentar a los menores con sus respectivos adultos, lo primero que buscamos es un asiento disponible para los menores segun el 'seat_type_id' que posean, de la lista de asientos encontrados se le asigna el primer asiento mediante su ID, se elimina dicho asiento de la lista de asientos y al adulto que coincida con su 'purchase_id' se le asigna el asiento de la fila siguiente pero de la misma columna
+
+```
+ ...
+  let availableSeatsForMinor = availableSeat.filter(
+         (seat) => seat.seat_type_id === seatType
+       );
+  if (availableSeatsForMinor.length === 0) continue;
+        let seatForMinor = availableSeatsForMinor[0];
+        minor.seat_id = seatForMinor.seat_id;
+        availableSeat.splice(availableSeat.indexOf(seatForMinor), 1);
+  ...
+  ```
+Luego se obtiene el codigo ASCII de la letra de la columna del asiento del menor, se le suma 1 y se convierte en el siguiente caracter con la funcion 'String.fromCharCode()', que devuelve una cadena creada a partir de la secuencia de valores Unicode especificados.
+```
+...
+  let seatRow = seatForMinor.seat_row;
+        let nextSeatColumn = String.fromCharCode(
+          seatForMinor.seat_column.charCodeAt() + 1
+        );
+        let availableSeatForAdult = availableSeat.find(
+          (seat) =>
+            seat.seat_row === seatRow && seat.seat_column === nextSeatColumn
+        );
+   ....
+ ```
+ Luego se van a buscar el resto de asientos para los pasajeros adultos, ubicandolos en asientos mas cercanos ya sea por filas o columnas, se va eliminando el asiento de la lista de asientos disponibles y se elimina al menor y al adulto de sus respectivos arreglos de pasajeros.
+ 
 ## Despliegue 📦
 
-_Agrega notas adicionales sobre como hacer deploy_
+_notas adicionales sobre como hacer deploy_
 
 ## Construido con 🛠️
 
@@ -109,22 +138,10 @@ Node.js con Express como entorno de trabajo,
 Sequelize.js como posible ORM,
 MYSQL como base de datos suministrada,
 
-## Versionado 📌
-
-Usamos [SemVer](http://semver.org/) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/tu/proyecto/tags).
-
 ## Autores ✒️
 
-_Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
-
 * **Gabriel Iciarte** - *Trabajo Inicial* - [Gabriel Iciarte](https://www.linkedin.com/in/gabriel-iciarte/)
-* **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
 
-También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
-
-## Licencia 📄
-
-Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md](LICENSE.md) para detalles
 
 ## Expresiones de Gratitud 🎁
 
@@ -137,4 +154,4 @@ Este proyecto está bajo la Licencia (Tu Licencia) - mira el archivo [LICENSE.md
 
 
 ---
-⌨️ con ❤️ por [Villanuevand](https://github.com/Villanuevand) 😊
+⌨️ con ❤️ por [Gabriel Iciarte](https://github.com/ciarte) 😊
