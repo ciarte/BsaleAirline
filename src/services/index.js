@@ -1,6 +1,7 @@
 const connection = require("../database/db.js");
 const express = require("express");
 const router = express.Router();
+
 const sortFunc = function compareAge(a, b) {
   if (a.purchaseId < b.purchaseId) {
     return -1;
@@ -22,7 +23,8 @@ const sortFunc = function compareAge(a, b) {
 
 const getSeatByID = async function () {
   try {
-    return (let[result] = await connection.query("SELECT * FROM seat"));
+    let [result] = connection.query("SELECT * FROM seat");
+    return result;
   } catch (error) {
     console.log(error);
   }
@@ -30,7 +32,7 @@ const getSeatByID = async function () {
 
 const getFlightByID = async function (id) {
   try {
-    let [resultFlight] = await connection.query(
+    let [resultFlight] = connection.query(
       "SELECT * FROM flight WHERE flight_id=?",
       [id]
     );
@@ -41,18 +43,17 @@ const getFlightByID = async function (id) {
 };
 
 const getBoardingPassByFligth = async function (id) {
-  let [boarding_pass] = await connection.query(
+  let [boarding_pass] = connection.query(
     "SELECT * FROM boarding_pass JOIN passenger ON boarding_pass.passenger_id = passenger.passenger_id WHERE flight_id=?",
     [id]
   );
   return boarding_pass;
 };
 
-getSeatsByAirplane = async function (airplane) {
-  let [result] = await connection.query(
-    "SELECT * FROM seat WHERE airplane_id=?",
-    [airplane]
-  );
+const getSeatsByAirplane = async function (airplane) {
+  let [result] = connection.query("SELECT * FROM seat WHERE airplane_id=?", [
+    airplane,
+  ]);
   return result;
 };
 
