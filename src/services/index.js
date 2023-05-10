@@ -22,32 +22,34 @@ const sortFunc = function compareAge(a, b) {
 
 const getSeatByID = async function () {
   try {
-    let [result] = await connection.query("SELECT * FROM seat");
-    return result;
+    return (let[result] = await connection.query("SELECT * FROM seat"));
   } catch (error) {
     console.log(error);
   }
 };
 
 const getFlightByID = async function (id) {
-  const [resultFlight] = await connection.query(
-    "SELECT * FROM flight WHERE flight_id=?",
-    [id]
-  );
-
-  return resultFlight;
+  try {
+    let [resultFlight] = await connection.query(
+      "SELECT * FROM flight WHERE flight_id=?",
+      [id]
+    );
+    return resultFlight;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const getBoardingPassByFligth = async function (id){
-  const [boarding_pass] = await connection.query(
+const getBoardingPassByFligth = async function (id) {
+  let [boarding_pass] = await connection.query(
     "SELECT * FROM boarding_pass JOIN passenger ON boarding_pass.passenger_id = passenger.passenger_id WHERE flight_id=?",
     [id]
   );
   return boarding_pass;
 };
 
-const getSeatsByAirplane = async function (airplane) {
-  const [result] = await connection.query(
+getSeatsByAirplane = async function (airplane) {
+  let [result] = await connection.query(
     "SELECT * FROM seat WHERE airplane_id=?",
     [airplane]
   );
