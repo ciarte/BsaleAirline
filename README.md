@@ -196,6 +196,7 @@ MYSQL como base de datos suministrada.
 * Espero seguir con el proceso y trabajar juntos :briefcase::computer:
 
 
-Aprecio el tiempo y esfuerzo que han invertido en mi candidatura y espero haber cumplido con sus expectativas. Estoy emocionado por la posibilidad de unirme al equipo y contribuir al exito de la empresa.
+Aprecio el tiempo y esfuerzo que han invertido en mi candidatura y espero haber cumplido con sus expectativas. Estoy emocionado/a por la posibilidad de unirme al equipo y contribuir al éxito de la empresa.
+
 ---
 ⌨️ con ❤️ por [Gabriel Iciarte](https://github.com/ciarte) 😊
