@@ -1,6 +1,6 @@
-# Airline - Bsale 	:airplane:
+# Airline 	:airplane:
 
-Ejercicio de Postulacion donde se simula un Check-in automatico de los pasajerosd de una Aerolinea,
+Ejercicio donde se simula un Check-in automatico de los pasajerosd de una Aerolinea,
 se trata de una API REST con un solo endpoint que permite coonsultar por ID de vuelo y retorna la simulacion, la cual le debe asignar los asientos a cada pasajero que aun no tenga uno asignado.
 
 ## Comenzando 🚀
@@ -183,7 +183,6 @@ MYSQL como base de datos suministrada.
 ## Autores ✒️
 
 * **Gabriel Iciarte** - *Trabajo Back-end* - [Gabriel Iciarte](https://www.linkedin.com/in/gabriel-iciarte/)
-* **Bsale** - *DATA BASE solo lectura* 
 
 
 ## Expresiones de Gratitud 🎁
